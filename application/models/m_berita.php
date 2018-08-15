@@ -1,23 +1,28 @@
-<?php
-class M_berita extends CI_Model{
-    
-    function beita_terbaru($limit){
-        $this->db->select('id_berita','judul, penulis, hari, tgl_post, jam, isi, gambar');
-        $this->db->form('berita');
-        $this->db->form('$limit');
-        $this->db->order by("id_berita", "desc");
-        $query =$this->d->get();
-        return $query;
+//skrip  sebelumnnya
+function sipan_berita(){
+  $konfigurasi =array('allowed_types' => jpg|jpeg|gif|png|bmp','upload_path' => $this->gallerypath);
+  $this->upload->library('upload','$konfigurasi');
+  $this->load->do_upload();
+  $datafile =$this->upload->data();
 
-    }
 
-    function berita_sebelumnya($limit,$offset){
-        $this->db-select('id_berita,judul');
-        $this->db->limit($limit,$offset);
-        $this->db->order by("id_berita", "desc");
-        $query = $this-.db->get_where();
-        return $query
+  $konfigurasi = array('source_image' => $datafile['full_path'],
+  'new_image' =>$this-> gallarypath. '/thumbnails','maintain_ration' =>true,'width' => 130, 'height' =>100);
 
-    }
+$this->load->library('image_lib', $konfigurasi);
+$this->image_lib->resize();
+
+$judul   = $this->input->post('judul');
+$penulis = $this->input->post('penulis')
+$isi     = $this->input->post('isi') ?>
+$tgl     = date ('Y-m-d');
+$hari = nama_hari();
+$jam = date('H:i:s');
+$gambar = $_FILES['userfile']['name'];
+
+
+$data = array ('judul' => $judul, 'penulis' => $penulis,'isi' => $isi, 'tgl_post' => $tgl, 'hari' => $hari, 'jam' => $jam, 'gambar' => $gambar);
+
+$this->db->insert('berita', '$data');
+
 }
-?>
